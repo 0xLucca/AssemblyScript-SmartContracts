@@ -1,48 +1,33 @@
-export class Result {
-  flag: bool;
-  value: u8;
-  constructor(flag: bool, value: u8) {
-    this.flag = flag;
-    this.value = value;
-  }
+export function safeAdd(a: u8, b: u8): u8 {
+  const c: u8 = a + b;
+  assert(c >= a);
+  return c;
 }
 
-export function add(a: u8, b: u8): Result {
-  let c: u8 = a + b;
-  if (c < a) {
-    return new Result(false, 0);
-  }
-  return new Result(true, c);
+export function safeSub(a: u8, b: u8): u8 {
+  assert(a >= b);
+  const c = a - b;
+  return c;
 }
 
-export function sub(a: u8, b: u8): Result {
-  if (b > a) {
-    return new Result(false, 0);
-  }
-  return new Result(true, a - b);
-}
-
-export function mul(a: u8, b: u8): Result {
+export function safeMul(a: u8, b: u8): u8 {
   if (a == 0) {
-    return new Result(true, 0);
+    return 0;
   }
-  let c: u8 = a * b;
-  if (c / a != b) {
-    return new Result(false, 0);
-  }
-  return new Result(true, c);
+  const c: u8 = a * b;
+
+  assert(c / a == b);
+  return c;
 }
 
-export function div(a: u8, b: u8): Result {
-  if (b == 0) {
-    return new Result(false, 0);
-  }
-  return new Result(true, a / b);
+export function safeDiv(a: u8, b: u8): u8 {
+  assert(b > 0);
+  const c: u8 = a / b;
+  return c;
 }
 
-export function mod(a: u8, b: u8): Result {
-  if (b == 0) {
-    return new Result(false, 0);
-  }
-  return new Result(true, a % b);
+export function safeMod(a: u8, b: u8): u8 {
+  assert(b != 0);
+  const c: u8 = a % b;
+  return c;
 }

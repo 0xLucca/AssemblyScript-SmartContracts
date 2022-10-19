@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 import { env, Pack } from "ask-lang";
-import { Result, add, sub, mul, div, mod } from "./SafeMath";
+import { safeAdd, safeSub, safeMul, safeDiv, safeMod } from "./SafeMath";
 
 @spreadLayout
 @packedLayout
 export class Counter {
   value: u8;
+  oldValue: u8;
   constructor(value: u8 = 0) {
     this.value = value;
+    this.oldValue = 0;
   }
 }
 
@@ -33,15 +35,48 @@ export class Contract {
   }
 
   @message({ mutates: true })
-  modify(number: u8): void {
-    const result = add(this.data.value, number);
-    if (result.flag) {
-      this.data.value = result.value;
-    }
+  add(number: u8): void {
+    this.data.oldValue = this.data.value;
+    this.data.value = safeAdd(this.data.value, number);
+  }
+
+  @message({ mutates: true })
+  sub(number: u8): void {
+    this.data.oldValue = this.data.value;
+    this.data.value = safeSub(this.data.value, number);
+  }
+
+  @message({ mutates: true })
+  mul(number: u8): void {
+    this.data.oldValue = this.data.value;
+    this.data.value = safeMul(this.data.value, number);
+  }
+
+  @message({ mutates: true })
+  div(number: u8): void {
+    this.data.oldValue = this.data.value;
+    this.data.value = safeDiv(this.data.value, number);
+  }
+
+  @message({ mutates: true })
+  mod(number: u8): void {
+    this.data.oldValue = this.data.value;
+    this.data.value = safeMod(this.data.value, number);
+  }
+
+  @message({ mutates: true })
+  reset(): void {
+    this.data.oldValue = 0;
+    this.data.value = 0;
   }
 
   @message()
-  get(): u8 {
+  getValue(): u8 {
     return this.data.value;
+  }
+
+  @message()
+  getOldValue(): u8 {
+    return this.data.oldValue;
   }
 }
