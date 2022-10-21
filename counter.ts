@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 import { env, Pack } from "ask-lang";
-import { safeAdd, safeSub, safeMul, safeDiv, safeMod } from "./SafeMath";
+import { safeMath } from "./SafeMath";
 
 @spreadLayout
 @packedLayout
@@ -37,31 +37,31 @@ export class Contract {
   @message({ mutates: true })
   add(number: u8): void {
     this.data.oldValue = this.data.value;
-    this.data.value = safeAdd(this.data.value, number);
+    this.data.value = safeMath.safeAdd(this.data.value, number);
   }
 
   @message({ mutates: true })
   sub(number: u8): void {
     this.data.oldValue = this.data.value;
-    this.data.value = safeSub(this.data.value, number);
+    this.data.value = safeMath.safeSub(this.data.value, number);
   }
 
   @message({ mutates: true })
   mul(number: u8): void {
     this.data.oldValue = this.data.value;
-    this.data.value = safeMul(this.data.value, number);
+    this.data.value = safeMath.safeMul(this.data.value, number);
   }
 
   @message({ mutates: true })
   div(number: u8): void {
     this.data.oldValue = this.data.value;
-    this.data.value = safeDiv(this.data.value, number);
+    this.data.value = safeMath.safeDiv(this.data.value, number);
   }
 
   @message({ mutates: true })
   mod(number: u8): void {
     this.data.oldValue = this.data.value;
-    this.data.value = safeMod(this.data.value, number);
+    this.data.value = safeMath.safeMod(this.data.value, number);
   }
 
   @message({ mutates: true })
